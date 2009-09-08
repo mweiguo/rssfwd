@@ -63,12 +63,19 @@ function forwardCheckedSubs () {
 }
 
 function showFwdResult ( lst ) {
-    if ( lst.error==0  ) {
-	alert ( "succeeded: " + lst.succeeded );
-	alert ( "failed: " + lst.failed );
-    } else {
-	alert ( "error: " + lst.message );
+    const SUCCESS = 0;
+    const FAILED = 1;
+    var stitle = "succeeded : \n";
+    var ftitle = "failed : \n";
+    for ( var i=0; i<lst[SUCCESS].length; i++ ) {
+	stitle += lst[SUCCESS][i];
+	stitle += "\n";
     }
+    for ( i=0; i<lst[FAILED].length; i++ ) {
+	ftitle += lst[FAILED][i];
+	ftitle += "\n";
+    }
+    alert ( stitle + "\n" + ftitle );
 }
 
 window.onload = function () {
