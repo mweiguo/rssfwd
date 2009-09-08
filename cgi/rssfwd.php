@@ -52,12 +52,14 @@ class rssFwdSubManager {
     $element = strtolower ( $element );
     if ( array_key_exists ( $element, $this->validfield ) ) {
       $this->curfield = $element;
+/*       echo "$element<br>"; */
     }
   }
 
   function _endelement ( $parser, $element ) {
     $element = strtolower ( $element );
     if ( array_key_exists ( $element, $this->recordendfield ) ) {
+/*       echo "_$element<br>"; */
       $this->subscriptions[] = $this->cursubscription;
       $this->cursubscription = array();
     }
@@ -141,9 +143,9 @@ class rssFwdSubManager {
 
     $feed = new XML_Feed_Parser($data);
     foreach ( $feed as $entry ) {
-      if ( $entry->title != $sub['lasttitle'] )
+      if ( $entry->title != $sub['lasttitle'] ) {
 	$newentries[] = array ('title'=>$entry->title, 'desc'=>$entry->description, 'link'=>$entry->link);
-      else
+      } else
 	break;
     }
 
@@ -153,26 +155,46 @@ class rssFwdSubManager {
   }
   
   function fwdnew ( $l ) {
-    $sub = $this->_getSubscription ( $l );
-    if ( null == $sub ) return;
-    
-    $result = array( 'error'=>0, 'succeeded'=>0, 'failed'=>0 );
-    $newentries = $this->check ( $l );
-    if ( count($newentries) == 0 ) {
+    $sub = &$this->_getSubscription ( $l );
+    if ( $sub == null )
+      return array('error'=>1, 'message'=>"'$l' is not subscribted");
+    if ( !array_key_exists ( 'lasttitle', $sub ) ) 
+      $sub['lasttitle'] = '';
+
+    // get content from the link
+    $data = @file_get_contents($sub['link']);
+    if ( $data == false )
       return array_merge( array('error'=>1), (array)error_get_last() );
+
+    // parse content and get new entries
+    $feed = new XML_Feed_Parser($data);
+    $newentries = array();
+    foreach ( $feed as $en ) {
+      // if there have new entry, then forward it
+      if ( $en->title != $sub['lasttitle'] ) {
+	$newentries[] = $en;
+      } else {
+	break;
+      }
     }
 
-    foreach ( $newentries as $en ) {
+    $sresult = array();
+    $fresult = array();
+    for ( $i=count($newentries)-1; $i>=0; $i-- ) {
+      $en = $newentries[$i];
       $body = "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head>".
-	"<body><a href=$en[link]>".$en['title']."</a><br>".$en['desc']."</body></html>";
+	"<body><a href=$en->link>".$en->title."</a><br>".$en->desc."</body></html>";
+      //      if ( sendhtmlmail_auth ( "mweiguo@hh.com", $sub['email'], $en['title'], $body, "127.0.0.1", "mweiguo@hh.com", "h12345" ) )
+      if ( sendhtmlmail_auth ( "c_h3w4@yahoo.com.cn", $sub['email'], $en->title, $body, "smtp.mail.yahoo.com.cn", "c_h3w4", "h12345" ) ) {
+	$sub['lasttitle'] = $en->title;
+	$sresult[] = $en->title;
+      } else {
+	$fresult[] = $en->title;
+	break;
+      }
+    } 
 
-      //      if ( sendhtmlmail_auth ( "c_h3w4@yahoo.com.cn", $sub['email'], $en['title'], $body, "smtp.mail.yahoo.com.cn", "c_h3w4", "h12345" ) )
-      if ( sendhtmlmail_auth ( "mweiguo@hh.com", $sub['email'], $en['title'], $body, "127.0.0.1", "mweiguo@hh.com", "h12345" ) )
-	$result["succeeded"] ++;
-      else
-	$result["failed"] ++;
-    }
-
+    $result = array($sresult, $fresult);
     return $result;
   }
 

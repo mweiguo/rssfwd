@@ -1,7 +1,4 @@
 <?php
-$includepath = ini_get('include_path');
-$includepath .= ";C:/php-5.2.8-Win32/PEAR";
-ini_set ( 'include_path', $includepath);
 
 // api functions
 function getSubscriptionList () {
@@ -10,7 +7,6 @@ function getSubscriptionList () {
 }
 
 function addSubscription ( $paras ) {
-  print_r ( $paras );
   $email = $paras['email'];
   $name = $paras['name'];
   $link = $paras['link'];
@@ -22,7 +18,6 @@ function addSubscription ( $paras ) {
 }
 
 function removeSubscription ( $paras ) {
-  print_r ( $paras );
   $f = new rssFwdSubManager();
   $f->deleteSubscription ( $paras['link'] );
   $f->save();
@@ -50,6 +45,7 @@ function fowardAllNewFeeds () {
 
 
 
+require_once "stdinclude.php";
 require_once "rssfwd.php";
 
 // dispatch function

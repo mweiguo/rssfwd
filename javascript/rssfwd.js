@@ -17,8 +17,8 @@ function addSubscription () {
     var link   = document.getElementById ( "rsseditor" ).value;
     var rssname   = document.getElementById ( "rssnameeditor" ).value;
     link = urlencode ( link );
-    ajax_call ( "rssfwdapi.php?cmd=addSubscription&email=" + email + "&link=" + link + "&name=" + rssname , null, null );
-    ajax_call ( "rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
+    ajax_call ( "cgi/rssfwdapi.php?cmd=addSubscription&email=" + email + "&link=" + link + "&name=" + rssname , null, null );
+    ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
     email.value = "";
     link.value = "";
     rssname.value = "";
@@ -33,14 +33,14 @@ function removeCheckedSubs () {
 	if ( checkbox && checkbox.checked ) {
 	    var link = rows[i].cells[2].childNodes[0];
 	    if ( link ) {
-		ajax_call ( "rssfwdapi.php?cmd=removeSubscription&link="+urlencode(link.getAttribute('href')), null, null );
+		ajax_call ( "cgi/rssfwdapi.php?cmd=removeSubscription&link="+urlencode(link.getAttribute('href')), null, null );
 		doAction = true;		
 	    }
 	}
     }
 
     if ( doAction )
-	ajax_call ( "rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
+	ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
 }
 
 function forwardCheckedSubs () {
@@ -52,14 +52,14 @@ function forwardCheckedSubs () {
 	if ( checkbox && checkbox.checked ) {
 	    var link = rows[i].cells[2].childNodes[0];
 	    if ( link ) {
-		ajax_call ( "rssfwdapi.php?cmd=fowardNewRssFeeds&link="+urlencode(link.getAttribute('href')), null, showFwdResult );
+		ajax_call ( "cgi/rssfwdapi.php?cmd=fowardNewRssFeeds&link="+urlencode(link.getAttribute('href')), null, showFwdResult );
 		doAction = true;		
 	    }
 	}
     }
 
     if ( doAction )
-	ajax_call ( "rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
+	ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
 }
 
 function showFwdResult ( lst ) {
@@ -77,7 +77,7 @@ window.onload = function () {
     inputrss = new previeweditor ( "rsseditor",   "rssdetail",   "rsspreview");
     inputrssname  = new previeweditor ( "rssnameeditor",   "rssnamedetail",   "rssnamepreview");
  */
-    ajax_call ( "rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
+    ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
     document.getElementById ( "btnAdd" ).onclick = addSubscription;
     document.getElementById ( "btnRemove" ).onclick = removeCheckedSubs;
     document.getElementById ( "btnForwardFeeds" ).onclick = forwardCheckedSubs;

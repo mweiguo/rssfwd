@@ -39,8 +39,8 @@ function sendhtmlmail_auth ($from, $to, $subject, $html, $host, $usr, $pwd ) {
   $mail = $smtp->send($to, $headers, $body);
 
   if (PEAR::isError($mail)) {
-    echo("<p>" . $mail->getMessage() . "</p>");
     return false;
+    echo("<p>" . $mail->getMessage() . "</p>");
   } else {
     return true;
     echo("<p>Message successfully sent!</p>");
