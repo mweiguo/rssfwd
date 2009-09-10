@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once "XML/Feed/Parser.php";
 require_once "sendmail.php";
 
@@ -185,8 +185,8 @@ class rssFwdSubManager {
       $desc = null == $en->description ? $en->content : $en->description;
       $body = "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head>".
 	"<body><a href=$en->link>".$en->title."</a><br>".$desc."</body></html>";
-      //      if ( sendhtmlmail_auth ( "mweiguo@hh.com", $sub['email'], $en['title'], $body, "127.0.0.1", "mweiguo@hh.com", "h12345" ) )
-      if ( sendhtmlmail_auth ( "c_h3w4@yahoo.com.cn", $sub['email'], $en->title, $body, "smtp.mail.yahoo.com.cn", "c_h3w4", "h12345" ) ) {
+      //      if ( sendhtmlmail_auth ( "mweiguo@hh.com", $sub['email'], $en['title'], $body, "127.0.0.1", "mweiguo@hh.com", "*****" ) )
+      if ( sendhtmlmail_auth ( "c_h3w4@yahoo.com.cn", $sub['email'], $en->title, $body, "smtp.mail.yahoo.com.cn", "c_h3w4", "*****" ) ) {
 	$sub['lasttitle'] = $en->title;
 	$sresult[] = $en->title;
       } else {
