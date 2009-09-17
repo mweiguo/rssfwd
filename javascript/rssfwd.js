@@ -17,12 +17,16 @@ function addSubscription () {
     var link   = document.getElementById ( "rsseditor" ).value;
     var rssname   = document.getElementById ( "rssnameeditor" ).value;
     link = urlencode ( link );
-    ajax_call ( "cgi/rssfwdapi.php?cmd=addSubscription&email=" + email + "&link=" + link + "&name=" + rssname , null, null );
-    ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
+    ajax_call ( "cgi/rssfwdapi.php?cmd=addSubscription&email=" + email + "&link=" + link + "&name=" + rssname , null, onAddSubFinished );
     email.value = "";
     link.value = "";
     rssname.value = "";
- }
+}
+
+function onAddSubFinished ( lst ) {
+    alert ("onAddSubFinished") ;
+    ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
+}
 
 function removeCheckedSubs () {
     var tbl = document.getElementById ( 'sublist' );
@@ -33,14 +37,15 @@ function removeCheckedSubs () {
 	if ( checkbox && checkbox.checked ) {
 	    var link = rows[i].cells[2].childNodes[0];
 	    if ( link ) {
-		ajax_call ( "cgi/rssfwdapi.php?cmd=removeSubscription&link="+urlencode(link.getAttribute('href')), null, null );
+		ajax_call ( "cgi/rssfwdapi.php?cmd=removeSubscription&link="+urlencode(link.getAttribute('href')), null, onRemoveSubFinished );
 		doAction = true;		
 	    }
 	}
     }
+}
 
-    if ( doAction )
-	ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
+function onRemoveSubFinished ( lst ) {
+    ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
 }
 
 function forwardCheckedSubs () {
@@ -79,11 +84,11 @@ function showFwdResult ( lst ) {
 }
 
 window.onload = function () {
-/*
-    inputemail = new previeweditor ( "emaileditor", "emaildetail", "emailpreview");
-    inputrss = new previeweditor ( "rsseditor",   "rssdetail",   "rsspreview");
-    inputrssname  = new previeweditor ( "rssnameeditor",   "rssnamedetail",   "rssnamepreview");
- */
+    /*
+     inputemail = new previeweditor ( "emaileditor", "emaildetail", "emailpreview");
+     inputrss = new previeweditor ( "rsseditor",   "rssdetail",   "rsspreview");
+     inputrssname  = new previeweditor ( "rssnameeditor",   "rssnamedetail",   "rssnamepreview");
+     */
     ajax_call ( "cgi/rssfwdapi.php?cmd=getSubscriptionList", null, relayout_sublist );
     document.getElementById ( "btnAdd" ).onclick = addSubscription;
     document.getElementById ( "btnRemove" ).onclick = removeCheckedSubs;

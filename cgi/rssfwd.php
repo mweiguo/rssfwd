@@ -10,7 +10,7 @@ class rssFwdSubManager {
   private $validfield;
   private $tagendfield;
   private $recordendfield;
-
+n
   function __construct () {
     $subscriptions = array();
 
@@ -128,31 +128,6 @@ class rssFwdSubManager {
   function getSubsJson () {
     return json_encode ( $this->subscriptions );
   }
-
-  function check ( $l ) {
-    $sub = &$this->_getSubscription ( $l );
-    if ( $sub == null ) throw new Exception ( "can not find this link in db" );
-    if ( !array_key_exists ( 'lasttitle', $sub ) ) 
-      $sub['lasttitle'] = '';
-
-    $newentries = array();
-    $data = @file_get_contents($sub['link']);
-    if ( $data == false ) {
-      return $newentries;
-    }
-
-    $feed = new XML_Feed_Parser($data);
-    foreach ( $feed as $entry ) {
-      if ( $entry->title != $sub['lasttitle'] ) {
-	$newentries[] = array ('title'=>$entry->title, 'desc'=>$entry->description, 'link'=>$entry->link);
-      } else
-	break;
-    }
-
-    $en = $feed->getEntryByOffset(0);
-    $sub['lasttitle'] = $en ? $en->title : $sub['lasttitle'];
-    return $newentries;
-  }
   
   function fwdnew ( $l ) {
     $sub = &$this->_getSubscription ( $l );
@@ -186,7 +161,7 @@ class rssFwdSubManager {
       $body = "<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"></head>".
 	"<body><a href=$en->link>".$en->title."</a><br>".$desc."</body></html>";
       //      if ( sendhtmlmail_auth ( "mweiguo@hh.com", $sub['email'], $en['title'], $body, "127.0.0.1", "mweiguo@hh.com", "*****" ) )
-      if ( sendhtmlmail_auth ( "c_h3w4@yahoo.com.cn", $sub['email'], $en->title, $body, "smtp.mail.yahoo.com.cn", "c_h3w4", "*****" ) ) {
+      if ( sendhtmlmail_auth ( "c_h3w4@yahoo.com.cn", $sub['email'], $en->title, $body, "smtp.mail.yahoo.com.cn", "c_h3w4", "h12345" ) ) {
 	$sub['lasttitle'] = $en->title;
 	$sresult[] = $en->title;
       } else {
@@ -207,7 +182,6 @@ class rssFwdSubManager {
 }
 
 /* require_once "sendmail.php"; */
-
 /* $m = new rssFwdSubManager; */
 /* $m->getSubsJson(); */
 /* $m->addSubscription ( 'liqi0327@gmail.com', "自行车游记", "this is link", '', '' ); */
