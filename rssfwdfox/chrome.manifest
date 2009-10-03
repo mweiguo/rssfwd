@@ -1,0 +1,4 @@
+content	rssfwdfox	content/
+locale	rssfwdfox	en-US	locale/en-US/
+skin	rssfwdfox	classic/1.0	skin/
+overlay	chrome://browser/content/browser.xul	chrome://rssfwdfox/content/firefoxOverlay.xul
