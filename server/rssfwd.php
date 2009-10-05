@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once "XML/Feed/Parser.php";
 require_once "sendmail.php";
 
@@ -10,7 +10,7 @@ class rssFwdSubManager {
   private $validfield;
   private $tagendfield;
   private $recordendfield;
-n
+
   function __construct () {
     $subscriptions = array();
 
@@ -110,8 +110,12 @@ n
 
   function addSubscription ( $e, $n, $l, $t, $d) {
     // check existance
-    if ( null == $this->_getSubscription ( $l ) )
+    if ( null == $this->_getSubscription ( $l ) ) {
       $this->subscriptions[] = array ('email'=>$e, 'name'=>$n, 'link'=>$l, 'lasttitle'=>$t, 'lastdesc'=>$d );
+      return true;
+    } else {
+      return false;
+    }
   }
 
   function deleteSubscription ( $l ) {
@@ -119,6 +123,20 @@ n
       if ( !array_key_exists ( 'link', $this->subscriptions[$i]) ) continue;
       if ( $l == $this->subscriptions[$i]['link'] ) {
 	array_splice ( $this->subscriptions, $i, 1 );
+	return true;
+      }
+    }
+    return false;
+  }
+
+  function modifySubscription ( $oldl, $l, $e, $n ) {
+    for ( $i=0; $i<count($this->subscriptions); $i++ ) {
+      if ( !array_key_exists ( 'link', $this->subscriptions[$i]) ) continue;
+
+      if ( $oldl == $this->subscriptions[$i]['link'] ) {
+	$this->subscriptions[$i]['name']  = $n;
+	$this->subscriptions[$i]['email'] = $e;
+	$this->subscriptions[$i]['link'] = $l;
 	return true;
       }
     }

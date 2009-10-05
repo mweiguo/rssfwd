@@ -3,13 +3,14 @@
 <!DOCTYPE overlay SYSTEM "chrome://rssfwdfox/locale/rssfwdfox.dtd">
 <overlay id="rssfwdfox-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script src="prototype.js"/>
   <script src="overlay.js"/>
   <stringbundleset id="stringbundleset">
     <stringbundle id="rssfwdfox-strings" src="chrome://rssfwdfox/locale/rssfwdfox.properties"/>
   </stringbundleset>
 
-  <menupopup id="menu_ToolsPopup">
-    <menuitem id="rssfwdfox-hello" label="&rssfwdfox.label;" 
-              oncommand="rssfwdfox.onMenuItemCommand(event);"/>
-  </menupopup>
+  <statusbar id="status-bar">
+    <statusbarpanel id="my-panel" label="123" onclick="rssfwdfox.onOpenPreference(event);"/>
+  </statusbar>  
+
 </overlay>
