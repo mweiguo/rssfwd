@@ -12,7 +12,7 @@ var rssfwdfox = {
 			     method:'get',
 			     onSuccess: function(transport){
 				 var response = transport.responseText || "no response text";
-				 alert ( response );
+//				 alert ( response );
 			     },
 			     onFailure: function(){ alert('Something went wrong...'); }
 			 });

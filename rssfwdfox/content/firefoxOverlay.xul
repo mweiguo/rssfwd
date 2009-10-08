@@ -5,12 +5,21 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script src="prototype.js"/>
   <script src="overlay.js"/>
+
   <stringbundleset id="stringbundleset">
     <stringbundle id="rssfwdfox-strings" src="chrome://rssfwdfox/locale/rssfwdfox.properties"/>
   </stringbundleset>
 
   <statusbar id="status-bar">
-    <statusbarpanel id="my-panel" label="123" onclick="rssfwdfox.onOpenPreference(event);"/>
+
+    <statusbarpanel id="my-panel" class="statusbarpanel-menu-iconic" src="chrome://rssfwdfox/content/images/accept.png">
+      <command id="showpref" oncommand="rssfwdfox.onOpenPreference(event);"/>
+      <menupopup>
+	<menuitem label="管理RSS列表" command="showpref"/>
+	<menuitem label="设置检查时间" command="showpref"/>
+      </menupopup>
+    </statusbarpanel>
+
   </statusbar>  
 
 </overlay>
